@@ -29,22 +29,23 @@ export function getUniqueClassName() {
  *
  * @returns {Array} variants list
  */
+const defaultVariants = [];
 export function getVariants(variantsMap) {
-  let result = variantsMap;
-
-  if (result !== undefined) {
-    result = Object.keys(variantsMap).reduce((acc, variantName) => {
-      if (variantsMap[variantName]) {
-        return [...acc, variantName];
-      }
-
-      return acc;
-    }, []);
-  }
-
-  return result;
-}
-
+   let result;
+ 
+   if (typeof variantsMap === 'object') {
+     result = Object.keys(variantsMap).reduce((acc, variantName) => {
+       if (variantsMap[variantName]) {
+         return [...acc, variantName];
+       }
+ 
+       return acc;
+     }, defaultVariants);
+   }
+ 
+   return result;
+ }
+ 
 /**
  * hasVariant - calculates if a variants list contains a variant
  *
