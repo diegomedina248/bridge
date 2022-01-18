@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { useRef, useEffect, useCallback } from 'react';
+import memoize from 'lodash/memoize';
 
 let instanceCounter = 1;
 
@@ -90,9 +91,17 @@ export const useReport = (props) => {
   );
 
   const getDebugKey = useCallback(
-    (rs, instanceId) =>
-      new DebugKey(instanceId, ownerRootInstances, ownerScopeIdRef.current, rs),
-    [],
+    memoize(
+      (rs, instanceId) =>
+        new DebugKey(
+          instanceId,
+          ownerRootInstances,
+          ownerScopeIdRef.current,
+          rs
+        ),
+      (_, instanceId) => instanceId
+    ),
+    []
   );
 
   return [report, getDebugKey];
