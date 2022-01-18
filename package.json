@@ -6,7 +6,7 @@
   "scripts": {
     "test": "yarn prettier && yarn lint",
     "build": "webpack --config webpack.config.js",
-    "prettier": "prettier --config ./.prettierrc -l ./src/**/*",
+    "prettier": "prettier --config ./.prettierrc --check ./src/**/*",
     "lint": "./node_modules/.bin/eslint src/**",
     "prepublish": "yarn test && yarn build"
   },

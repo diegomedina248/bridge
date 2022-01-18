@@ -97,11 +97,11 @@ export const useReport = (props) => {
           instanceId,
           ownerRootInstances,
           ownerScopeIdRef.current,
-          rs
+          rs,
         ),
-      (_, instanceId) => instanceId
+      (_, instanceId) => instanceId,
     ),
-    []
+    [],
   );
 
   return [report, getDebugKey];
