@@ -99,7 +99,7 @@ export const useReport = (props) => {
           ownerScopeIdRef.current,
           rs,
         ),
-      (_, instanceId) => instanceId,
+      (_, instanceId) => [...rs, instanceId].join('-')
     ),
     [],
   );
