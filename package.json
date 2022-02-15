@@ -1,6 +1,6 @@
 {
   "name": "@clutch-creator/bridge",
-  "version": "3.0.5-beta.1",
+  "version": "3.0.5",
   "description": "Clutch Bridge",
   "main": "index.js",
   "scripts": {
