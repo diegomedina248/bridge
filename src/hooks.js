@@ -1,25 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { useRef, useEffect, useCallback } from 'react';
-import memoize from 'lodash/memoize';
 
-let instanceCounter = 1;
-
-function combineRs(rs, reportId) {
-  return [...(rs || []), reportId];
-}
-
-class DebugKey {
-  constructor(id, rootInstances, ownerScopeId, reports) {
-    this.id = id;
-    this.rootInstances = rootInstances;
-    this.reports = reports;
-    this.ownerScopeId = ownerScopeId;
-  }
-
-  toString() {
-    return '';
-  }
-}
+let instanceCounter = 0;
 
 let inspector;
 
@@ -27,82 +9,52 @@ if (typeof window !== 'undefined' && window.__CLUTCH_INSPECTOR__) {
   inspector = window.__CLUTCH_INSPECTOR__;
 }
 
+const deserializeDebugKey = (debugKey) =>
+  String(debugKey)
+    .match(/(.+?)#(.+?)#(.*)/)
+    ?.slice(1) || [];
+const calculateScope = (debugKey) => {
+  const [previousScope, rootInstanceId] = deserializeDebugKey(debugKey);
+
+  return previousScope && previousScope !== '0'
+    ? `${previousScope}.${rootInstanceId}`
+    : rootInstanceId;
+};
+
 // eslint-disable-next-line import/prefer-default-export
-export const useReport = (props) => {
+export const useReport = (report) => {
   const ownerScopeIdRef = useRef(null);
-  let reportsCounter = 0;
-  const ownerDebugKey = props?.['data-d'];
-  const ownerRootInstances = ownerDebugKey?.rootInstances
-    ? [...ownerDebugKey.rootInstances, ownerDebugKey.id]
-    : [];
 
   if (!ownerScopeIdRef.current) {
-    ownerScopeIdRef.current = instanceCounter;
+    ownerScopeIdRef.current =
+      calculateScope(report?.attributes?.['data-d']) || String(instanceCounter);
     instanceCounter += 1;
   }
 
   useEffect(() => {
-    if (inspector && inspector.cancelDropReports && ownerScopeIdRef.current) {
+    if (inspector?.cancelDropReports && ownerScopeIdRef.current) {
       inspector.cancelDropReports(ownerScopeIdRef.current);
     }
 
     return () => {
-      if (inspector && ownerScopeIdRef.current) {
+      if (inspector?.dropReports && ownerScopeIdRef.current) {
         inspector.dropReports(ownerScopeIdRef.current);
       }
     };
-  }, []);
+  }, [report?.attributes?.['data-d']]);
 
-  const report = useCallback(
-    (rs, instanceId, propName, attributes, variables) => {
-      if (inspector) {
-        const reportId = reportsCounter;
-        reportsCounter += 1;
+  const getKey = useCallback(
+    (childReport, childId, customKey) => {
+      const key = [ownerScopeIdRef.current, childId, customKey].join('#');
 
-        // remove data-d from attributes
-        let reportAttributes = attributes;
-
-        if (
-          rs === null &&
-          attributes &&
-          typeof attributes === 'object' &&
-          !Array.isArray(attributes) &&
-          attributes !== null
-        ) {
-          reportAttributes = { ...attributes };
-          delete reportAttributes['data-d'];
-        }
-
-        inspector.report(
-          ownerScopeIdRef.current,
-          reportId,
-          instanceId,
-          propName,
-          reportAttributes,
-          variables,
-        );
-
-        return combineRs(rs, reportId);
+      if (inspector?.report) {
+        inspector.report(key, childReport);
       }
 
-      return null;
+      return key;
     },
-    [],
+    [ownerScopeIdRef.current],
   );
 
-  const getDebugKey = useCallback(
-    memoize(
-      (rs, instanceId) =>
-        new DebugKey(
-          instanceId,
-          ownerRootInstances,
-          ownerScopeIdRef.current,
-          rs,
-        ),
-      (rs, instanceId) => combineRs(rs, instanceId).join('-'),
-    ),
-    [],
-  );
-
-  return [report, getDebugKey];
+  return [report, getKey];
 };
