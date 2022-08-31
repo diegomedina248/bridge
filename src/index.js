@@ -88,8 +88,7 @@ export const useReport = (instanceId, propsArg, variants, ref) => {
   const ownerScopeIdRef = useRef(null);
 
   if (!ownerScopeIdRef.current) {
-    ownerScopeIdRef.current =
-      calculateScope(dataD) || String(instanceCounter);
+    ownerScopeIdRef.current = calculateScope(dataD) || String(instanceCounter);
     instanceCounter += 1;
   }
 
@@ -102,7 +101,10 @@ export const useReport = (instanceId, propsArg, variants, ref) => {
   };
 
   if (INSPECTOR?.report) {
-    INSPECTOR.report([ownerScopeIdRef.current, instanceId, 'none'].join('#'), report);
+    INSPECTOR.report(
+      [ownerScopeIdRef.current, instanceId, 'none'].join('#'),
+      report,
+    );
   }
 
   // drop reports logic
