@@ -63,7 +63,7 @@ const calculateScope = (debugKey) => {
 
   return previousScope && previousScope !== '0'
     ? `${previousScope}.${rootInstanceId}`
-    : rootInstanceId;
+    : (rootInstanceId || '0');
 };
 
 let instanceCounter = 0;
@@ -79,8 +79,12 @@ let instanceCounter = 0;
  * @returns {[Object, Function, Object]} [report, getKey, props]
  */
 export const useReport = (instanceId, propsArg, variants, ref) => {
-  const props = { ...propsArg, ref };
+  const props = { ...propsArg };
   const dataD = props['data-d'];
+
+  if (ref) {
+    props.ref = ref;
+  }
 
   delete props['data-d'];
 
