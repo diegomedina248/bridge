@@ -63,7 +63,7 @@ const calculateScope = (debugKey) => {
 
   return previousScope && previousScope !== '0'
     ? `${previousScope}.${rootInstanceId}`
-    : (rootInstanceId || '0');
+    : rootInstanceId || '0';
 };
 
 let instanceCounter = 0;
