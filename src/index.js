@@ -30,7 +30,9 @@ export function tryCatch(fn, ...args) {
 
   try {
     if (typeof fn !== 'function') {
-      throw new Error('Code property on an instance is not exporting a function');
+      throw new Error(
+        'Code property on an instance is not exporting a function',
+      );
     }
 
     result = fn(...args);
