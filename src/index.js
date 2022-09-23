@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import cx from 'classnames';
+import classnames from 'classnames';
 import { useRef, useEffect, useCallback } from 'react';
 
 /**
@@ -16,7 +16,7 @@ const INSPECTOR =
  *
  * @returns {*} resulting value
  */
-export const mClassnames = cx;
+export const cx = classnames;
 
 /**
  * tryCatch - tries to run the passed fn
@@ -29,6 +29,10 @@ export function tryCatch(fn, ...args) {
   let result;
 
   try {
+    if (typeof fn !== 'function') {
+      throw new Error('Code property on an instance is not exporting a function');
+    }
+
     result = fn(...args);
   } catch (err) {
     // eslint-disable-next-line
