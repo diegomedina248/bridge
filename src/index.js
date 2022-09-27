@@ -161,9 +161,21 @@ export const getReport = (
   instanceId,
   propertyName,
   parentReport,
-  newVariables,
+  newVariablesName,
+  newVars,
 ) => {
-  const vars = { ...parentReport.vars, ...newVariables };
+  let vars = parentReport.vars;
+
+  if (newVars?.length) {
+    vars = { ...parentReport.vars, [newVariablesName]: newVars[0] };
+
+    // in case the render props pass multiple arguments
+    // we include a new namespace with the full vars list
+    if (newVars.length > 1) {
+      vars[`${newVariablesName}Args`] = newVars;
+    }
+  }
+
   const report = {
     instanceId,
     propertyName,
