@@ -84,7 +84,7 @@ let instanceCounter = 0;
  *
  * @returns {[Object, Function, Object]} [report, getKey, props]
  */
-export const useReport = (instanceId, propsArg, variants, ref) => {
+export const useReport = (instanceId, propsArg, vars, variants, ref) => {
   const props = { ...propsArg };
   const dataD = props['data-d'];
 
@@ -107,6 +107,7 @@ export const useReport = (instanceId, propsArg, variants, ref) => {
     instanceId,
     propertyName: 'COMPOSITION',
     props,
+    vars,
     variants,
   };
 
