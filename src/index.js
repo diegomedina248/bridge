@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 /* eslint-disable no-underscore-dangle */
 import { useRef, useEffect, useCallback } from 'react';
