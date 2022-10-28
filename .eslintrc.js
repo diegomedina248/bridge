@@ -1,5 +1,5 @@
 module.exports = {
-  parser: "babel-eslint",
+  parser: "@babel/eslint-parser",
   extends: ["airbnb", "prettier"],
   env: {
     browser: true,
@@ -8,6 +8,7 @@ module.exports = {
     jest: true
   },
   parserOptions: {
+    requireConfigFile: false,
     ecmaFeatures: {
       legacyDecorators: true
     }

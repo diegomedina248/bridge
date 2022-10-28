@@ -1,6 +1,8 @@
+"use client";
+
 /* eslint-disable no-underscore-dangle */
-import classnames from 'classnames';
 import { useRef, useEffect, useCallback } from 'react';
+import classnames from 'classnames';
 
 /**
  * Get the clutch inspector at the current version
