@@ -5,4 +5,6 @@ build
 yarn-error.log
 /index.js
 /index.js.map
+/index.mjs
+/index.mjs.map
 *.LICENSE

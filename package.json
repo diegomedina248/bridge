@@ -3,9 +3,12 @@
   "version": "5.0.0-rc.7",
   "description": "Clutch Bridge",
   "main": "index.js",
+  "module": "index.mjs",
   "scripts": {
     "test": "pnpm prettier && pnpm lint",
-    "build": "swc ./src/index.js -o ./index.js -s",
+    "build": "pnpm build:cjs & pnpm build:mjs",
+    "build:cjs": "swc ./src/index.js -o ./index.js -s --config-file .swc-cjs-rc",
+    "build:mjs": "swc ./src/index.js -o ./index.mjs -s --config-file .swc-es6-rc",
     "prettier": "prettier --config ./.prettierrc --check ./src/**/*",
     "lint": "pnpm eslint src/**",
     "prepublish": "pnpm test && pnpm build"

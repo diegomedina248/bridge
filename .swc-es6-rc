@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json.schemastore.org/swcrc",
+    "jsc": {
+        "externalHelpers": true
+    },
+    "module": {
+        "type": "es6"
+    }
+}
