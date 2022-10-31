@@ -1,6 +1,6 @@
 {
   "name": "@clutch-creator/bridge",
-  "version": "5.0.0-rc.7",
+  "version": "5.0.0-rc.8",
   "description": "Clutch Bridge",
   "main": "index.js",
   "module": "index.mjs",
