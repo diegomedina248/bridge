@@ -99,7 +99,8 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
   // Check if we're redering on server side
   if (!React.useRef) {
     const getKey = React.useCallback(
-      (_, childId, customKey) =>  [calculateScope(dataD), childId, customKey].join('#'),
+      (_, childId, customKey) =>
+        [calculateScope(dataD), childId, customKey].join('#'),
       [dataD],
     );
 
