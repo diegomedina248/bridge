@@ -1,7 +1,7 @@
 'use client';
 
 /* eslint-disable no-underscore-dangle */
-import { useRef, useEffect, useCallback } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 
 /**
@@ -96,8 +96,19 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
 
   delete props['data-d'];
 
+  // Check if we're redering on server side
+  if (!React.useRef) {
+    const getKey = React.useCallback(
+      (_, childId, customKey) =>  [calculateScope(dataD), childId, customKey].join('#'),
+      [dataD],
+    );
+
+    // server side component
+    return [{}, getKey, props];
+  }
+
   // calculate owner scope id
-  const ownerScopeIdRef = useRef(null);
+  const ownerScopeIdRef = React.useRef(null);
 
   if (!ownerScopeIdRef.current) {
     ownerScopeIdRef.current = calculateScope(dataD) || String(instanceCounter);
@@ -121,7 +132,7 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
   }
 
   // drop reports logic
-  useEffect(() => {
+  React.useEffect(() => {
     if (INSPECTOR?.cancelDropReports && ownerScopeIdRef.current) {
       INSPECTOR.cancelDropReports(ownerScopeIdRef.current);
     }
@@ -134,7 +145,7 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
   }, [dataD]);
 
   // get key handler for children instances
-  const getKey = useCallback(
+  const getKey = React.useCallback(
     (childReport, childId, customKey) => {
       const key = [ownerScopeIdRef.current, childId, customKey].join('#');
 
