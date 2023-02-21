@@ -1,14 +1,14 @@
 {
   "name": "@clutch-creator/bridge",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "description": "Clutch Bridge",
   "main": "index.js",
   "scripts": {
-    "test": "yarn prettier && yarn lint",
-    "build": "webpack --config webpack.config.js",
+    "test": "pnpm prettier && pnpm lint",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.config.js",
     "prettier": "prettier --config ./.prettierrc --check ./src/**/*",
     "lint": "./node_modules/.bin/eslint src/**",
-    "prepublish": "yarn test && yarn build"
+    "prepublish": "pnpm test && pnpm build"
   },
   "repository": {
     "type": "git",

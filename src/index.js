@@ -113,7 +113,7 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
 
   if (INSPECTOR?.report) {
     INSPECTOR.report(
-      [ownerScopeIdRef.current, instanceId, 'none'].join('#'),
+      [ownerScopeIdRef.current, instanceId, ''].join('#'),
       report,
     );
   }
@@ -133,11 +133,11 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
 
   // get key handler for children instances
   const getKey = useCallback(
-    (childReport, childId, customKey) => {
+    (childReport, childId, customKey, clutchInternalId) => {
       const key = [ownerScopeIdRef.current, childId, customKey].join('#');
 
       if (INSPECTOR?.report) {
-        INSPECTOR.report(key, childReport);
+        INSPECTOR.report(key, childReport, clutchInternalId);
       }
 
       return key;

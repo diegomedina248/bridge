@@ -5,17 +5,17 @@ Library built to be used as a dependency for users shift projects that makes the
 ## Installation
 
 ```bash
-yarn
+pnpm
 ```
 
 ## Build
 
 ```bash
-yarn build
+pnpm build
 ```
 
 ## Test
 
 ```bash
-yarn test
+pnpm test
 ```
