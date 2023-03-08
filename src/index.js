@@ -1,6 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import classnames from 'classnames';
-import { useRef, useEffect, useCallback } from 'react';
+import React, { useRef, useEffect, useCallback } from 'react';
+import { ChakraProvider } from '@chakra-ui/provider';
+import { ColorModeScript, useColorMode } from '@chakra-ui/color-mode';
+import { useTheme as useChakraTheme } from '@chakra-ui/system';
 
 /**
  * Get the clutch inspector at the current version
@@ -185,4 +188,136 @@ export const getReport = (
   };
 
   return [report, vars];
+};
+
+/**
+ * Color mode component that handles changes to the color mode
+ *
+ * @param {Object} theme
+ * @param {React.Node} children
+ */
+function ColorMode({ colorMode }) {
+  const { colorMode: currentColorMode, toggleColorMode } = useColorMode();
+
+  useMemo(() => {
+    if (currentColorMode !== colorMode) {
+      toggleColorMode();
+    }
+  }, [colorMode, currentColorMode]);
+
+  return null;
+}
+
+/**
+ * Theme component provider
+ *
+ * @param {Object} theme
+ * @param {React.Node} children
+ */
+export const Theme = ({ theme = {}, colorMode, children }) => {
+  const config = {
+    initialColorMode: colorMode,
+    useSystemColorMode: false,
+  };
+  const finalTheme = { ...theme, config };
+
+  return (
+    <ChakraProvider theme={finalTheme}>
+      <ColorModeScript
+        initialColorMode={finalTheme?.config?.initialColorMode}
+      />
+      <ColorMode colorMode={colorMode} />
+      {typeof children === 'function' ? children() : children}
+    </ChakraProvider>
+  );
+};
+
+/**
+ * processCssMap - parses chakra theme values into a more digestable object
+ *
+ * @param {Object} theme
+ * @param {React.Node} children
+ */
+let cachedProcess = {
+  map: undefined,
+  result: undefined,
+};
+
+function processCssMap(cssMap) {
+  if (cachedProcess.map === cssMap) {
+    return cachedProcess.result;
+  }
+
+  const result = {};
+
+  Object.entries(cssMap || {}).forEach(([key, value]) => {
+    const split = key.split('.');
+    let curr = result;
+
+    split.forEach((splitPath, index) => {
+      if (index !== split.length - 1) {
+        curr[splitPath] = curr[splitPath] || {};
+        curr = curr[splitPath];
+      } else {
+        curr[splitPath] = value?.varRef;
+      }
+    });
+  });
+
+  cachedProcess.map = cssMap;
+  cachedProcess.result = result;
+
+  return result;
+}
+
+/**
+ * useTheme - returns the theme and helper functions to handle theming
+ *
+ * @param {Object} theme
+ * @param {React.Node} children
+ */
+export const useTheme = () => {
+  const theme = useChakraTheme();
+  const { colorMode, toggleColorMode } = useColorMode();
+
+  return {
+    values: processCssMap(theme?.__cssMap),
+    colorMode,
+    toggleColorMode,
+  };
+};
+
+/**
+ * useFont - injects a font stylesheet
+ *
+ * @param {String} url
+ */
+const scheduledRemoves = {};
+
+export const useFont = (url) => {
+  useEffect(() => {
+    let element;
+
+    if (scheduledRemoves[url]) {
+      clearTimeout(scheduledRemoves[url].timeout);
+      element = scheduledRemoves[url].element;
+    } else {
+      element = document.createElement('link');
+
+      element.rel = 'stylesheet';
+      element.href = url;
+
+      document.head.appendChild(element);
+    }
+
+    return () => {
+      // timeout is required because of react refresh clearing
+      // hooks on updates
+      const timeout = setTimeout(() => {
+        document.head.removeChild(element);
+      }, 1000);
+
+      scheduledRemoves[url] = { timeout, element };
+    };
+  }, [url]);
 };
