@@ -263,7 +263,7 @@ function processCssMap(cssMap) {
     Object.entries(cssMap || {}).forEach(([key, value]) => {
       const split = key.split('.');
       let curr = result;
-  
+
       split.forEach((splitPath, index) => {
         if (index !== split.length - 1) {
           curr[splitPath] = curr[splitPath] || {};
@@ -273,7 +273,7 @@ function processCssMap(cssMap) {
         }
       });
     });
-  
+
     cachedProcess.map = cssMap;
     cachedProcess.result = result;
   } catch (err) {
