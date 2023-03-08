@@ -1,6 +1,8 @@
+'use client';
+
 /* eslint-disable no-underscore-dangle */
+import React, { useRef, useEffect, useCallback, useMemo } from 'react';
 import classnames from 'classnames';
-import React, { useRef, useEffect, useCallback } from 'react';
 import { ChakraProvider } from '@chakra-ui/provider';
 import { ColorModeScript, useColorMode } from '@chakra-ui/color-mode';
 import { useTheme as useChakraTheme } from '@chakra-ui/system';
@@ -168,7 +170,7 @@ export const getReport = (
   newVariablesName,
   newVars,
 ) => {
-  let vars = parentReport.vars;
+  let { vars } = parentReport || {};
 
   if (newVars?.length) {
     vars = { ...parentReport.vars, [newVariablesName]: newVars[0] };
@@ -214,7 +216,7 @@ function ColorMode({ colorMode }) {
  * @param {Object} theme
  * @param {React.Node} children
  */
-export const Theme = ({ theme = {}, colorMode, children }) => {
+export function Theme({ theme = {}, colorMode, children }) {
   const config = {
     initialColorMode: colorMode,
     useSystemColorMode: false,
@@ -230,7 +232,7 @@ export const Theme = ({ theme = {}, colorMode, children }) => {
       {typeof children === 'function' ? children() : children}
     </ChakraProvider>
   );
-};
+}
 
 /**
  * processCssMap - parses chakra theme values into a more digestable object
@@ -238,7 +240,7 @@ export const Theme = ({ theme = {}, colorMode, children }) => {
  * @param {Object} theme
  * @param {React.Node} children
  */
-let cachedProcess = {
+const cachedProcess = {
   map: undefined,
   result: undefined,
 };

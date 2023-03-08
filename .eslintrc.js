@@ -1,108 +1,199 @@
+const overrideRules = {
+  'no-console': 'error',
+  camelcase: ['warn', { allow: ['^UNSAFE'] }],
+  // this was colliding with the sub render functions
+  // can be set back when it supports regex entries in exceptMethods
+  'no-promise-executor-return': 'off',
+  'class-methods-use-this': 'off',
+  'no-underscore-dangle': ['error', { allow: ['_id'] }],
+  'n/no-missing-import': [
+    'error',
+    {
+      allowModules: ['electron', '@jest/globals'],
+    },
+  ],
+  'n/no-unpublished-import': 'off',
+  'n/exports-style': ['error', 'exports'],
+  'n/file-extension-in-import': ['error', 'always'],
+  'n/prefer-global/buffer': ['error', 'always'],
+  'n/prefer-global/console': ['error', 'always'],
+  'n/prefer-global/process': ['error', 'always'],
+  'n/prefer-global/url-search-params': ['error', 'always'],
+  'n/prefer-global/url': ['error', 'always'],
+  'n/prefer-promises/dns': 'error',
+  'n/prefer-promises/fs': 'error',
+  'n/no-process-exit': 'off',
+  'n/no-extraneous-import': [
+    'error',
+    {
+      allowModules: ['electron'],
+    },
+  ],
+  'import/default': 'error',
+  'import/export': 'error',
+  'import/named': 'error',
+  'import/no-named-as-default': 'off',
+  'import/namespace': ['error', { allowComputed: true }],
+  // 'import/no-unresolved': ['error', { commonjs: true, amd: true }],
+  'import/no-unresolved': 'off',
+  'import/order': [
+    'error',
+    {
+      groups: ['builtin', 'external', 'parent', 'sibling', 'index'],
+      pathGroups: [
+        {
+          pattern: '@clutch-creator/**',
+          group: 'external',
+          position: 'after',
+        },
+      ],
+      pathGroupsExcludedImportTypes: ['builtin'],
+      'newlines-between': 'never',
+    },
+  ],
+  'jsx-a11y/click-events-have-key-events': 'warn',
+  'jsx-a11y/label-has-associated-control': [
+    'error',
+    { controlComponents: ['Input', 'LazyInput'] },
+  ],
+  'jsx-a11y/media-has-caption': 'warn',
+  'jsx-a11y/mouse-events-have-key-events': 'warn',
+  'jsx-a11y/no-static-element-interactions': 'warn',
+  'react/prop-types': 'off',
+  'react/no-unstable-nested-components': [
+    'error',
+    {
+      allowAsProps: true,
+    },
+  ],
+  'react/destructuring-assignment': [
+    'error',
+    'always',
+    { ignoreClassFields: true },
+  ],
+  // removed object prop type from forbidden since it leads to duplicate
+  // object structure types declaration which can be hard to maintain in
+  // the long term
+  'react/forbid-prop-types': [
+    'warn',
+    {
+      forbid: ['any'],
+    },
+  ],
+  'react/require-default-props': 'off',
+  'react/jsx-curly-newline': 'off',
+  'react/jsx-filename-extension': [
+    'warn',
+    { extensions: ['.js', '.jsx', '.tsx'] },
+  ],
+  'react/jsx-props-no-spreading': 'off',
+  // fix prettier and airbnb not playing together nicely
+  'react/jsx-wrap-multilines': [
+    'error',
+    { declaration: false, assignment: false },
+  ],
+  'react/state-in-constructor': 'off',
+  'react/static-property-placement': ['error', 'static public field'],
+  // React sub renders should go below the main render
+  // why? you read code from top to bottom
+  'react/sort-comp': [
+    'error',
+    {
+      order: [
+        'static-variables',
+        'static-methods',
+        'lifecycle',
+        '/^on.+$/',
+        '/^(get|set)(?!(InitialState$|DefaultProps$|ChildContext$)).+$/',
+        'everything-else',
+        'render',
+        '/^render.+$/',
+      ],
+    },
+  ],
+  'no-param-reassign': [
+    'error',
+    {
+      props: true,
+      ignorePropertyModificationsFor: ['draftState', 'acc'],
+      ignorePropertyModificationsForRegex: ['^draft'],
+    },
+  ],
+  'padding-line-between-statements': [
+    'warn',
+    { blankLine: 'always', prev: '*', next: 'return' },
+    { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+    {
+      blankLine: 'any',
+      prev: ['const', 'let', 'var'],
+      next: ['const', 'let', 'var'],
+    },
+  ],
+  'no-unused-vars': 'off',
+  'no-use-before-define': 'off',
+  '@typescript-eslint/no-require-imports': 'error',
+  '@typescript-eslint/no-use-before-define': [
+    'error',
+    { enums: false, typedefs: false, ignoreTypeReferences: true },
+  ],
+  'no-shadow': 'off',
+  '@typescript-eslint/no-shadow': ['error'],
+  '@typescript-eslint/no-unused-vars': [
+    'error',
+    { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
+  ],
+  '@typescript-eslint/ban-ts-comment': [
+    'error',
+    {
+      'ts-ignore': 'allow-with-description',
+      minimumDescriptionLength: 3,
+    },
+  ],
+  'import/extensions': [
+    'error',
+    'ignorePackages',
+    {
+      jsx: 'always',
+      ts: 'never',
+    },
+  ],
+};
+
+// eslint-disable-next-line no-undef
 module.exports = {
-  parser: "babel-eslint",
-  extends: ["airbnb", "prettier"],
+  root: true,
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'eslint:recommended',
+    'plugin:n/recommended',
+    'plugin:n/recommended-module',
+    'airbnb',
+    'prettier',
+    'plugin:json/recommended',
+    'plugin:@typescript-eslint/recommended',
+  ],
+  plugins: ['@typescript-eslint'],
   env: {
     browser: true,
     es6: true,
     node: true,
-    jest: true
+    jest: true,
   },
   parserOptions: {
+    ecmaVersion: 7,
+    sourceType: 'module',
     ecmaFeatures: {
-      legacyDecorators: true
-    }
+      jsx: true,
+      legacyDecorators: true,
+    },
   },
-  rules: {
-    "react/no-access-state-in-setstate": 0,
-    "react/destructuring-assignment": 0,
-    "react/jsx-one-expression-per-line": 0,
-    "react/button-has-type": 0,
-    "jsx-a11y/label-has-associated-control": 0,
-    // A .jsx extension is not required for files containing jsx.
-    "react/jsx-filename-extension": 0,
-    // allow _id underscore-dangle
-    "no-underscore-dangle": [
-      "error",
-      {
-        allowAfterThis: false,
-        allow: ["_id"]
-      }
-    ],
-    // enforcing stateless components also implies refactoring a
-    // component entirely if we want to switch it to a non functional one
-    // enforcing component structure consistency seems better at this point
-    // -> also no performance gains for now (actually the opposite)
-    "react/prefer-stateless-function": 0,
-    // React sub renders should go below the main render
-    // why? you read code from top to bottom
-    "react/sort-comp": [
-      "error",
-      {
-        order: [
-          "static-methods",
-          "lifecycle",
-          "/^on.+$/",
-          "/^(get|set)(?!(InitialState$|DefaultProps$|ChildContext$)).+$/",
-          "everything-else",
-          "render",
-          "/^render.+$/"
-        ]
-      }
-    ],
-    // this was colliding with the sub render functions
-    // can be set back when it supports regex entries in exceptMethods
-    "class-methods-use-this": 0,
-    // removed object prop type from forbidden since it leads to duplicate
-    // object structure types declaration which can be hard to maintain in
-    // the long term
-    "react/forbid-prop-types": [
-      "error",
-      {
-        forbid: ["any", "array"]
-      }
-    ],
-    // Sometimes mouse events are needed in other than buttons or links
-    "jsx-a11y/no-static-element-interactions": 0,
-
-    // in multiple cases you might want to break a single
-    // parameter into a new line
-    "function-paren-newline": 0,
-
-    // this broke some use cases where you want the semicolon in a new line
-    "semi-style": 0,
-
-    // this is broken for template string
-    indent: 0,
-
-    // broken for re assignments, enable again after fix
-    // https://github.com/eslint/eslint/issues/7886
-    "prefer-destructuring": 0,
-
-    // React router Link does not need/support href
-    "jsx-a11y/anchor-is-valid": 0,
-
-    // ignore this
-    "jsx-a11y/click-events-have-key-events": 0,
-    "jsx-a11y/mouse-events-have-key-events": 0,
-
-    // temporary until refactor to not use findDOMNode
-    "react/no-find-dom-node": 0,
-
-    // htmlFor is enough
-    "jsx-a11y/label-has-for": 0,
-
-    // ignore
-    "jsx-a11y/no-autofocus": 0,
-
-    // ignore
-    "jsx-a11y/no-noninteractive-element-interactions": 0,
-    "react/no-will-update-set-state": 0,
-    "jsx-a11y/media-has-caption": 0,
-
-    // fix prettier and airbnb not playing together nicely
-    "react/jsx-wrap-multilines": [
-      "error",
-      { declaration: false, assignment: false }
-    ]
-  }
+  rules: overrideRules,
+  overrides: [
+    {
+      files: ['**/*.ts', '**/*.tsx', '**/*.test.js'],
+      rules: {
+        'n/no-missing-import': 'off',
+      },
+    },
+  ],
 };
