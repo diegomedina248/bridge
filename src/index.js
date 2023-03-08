@@ -219,7 +219,7 @@ function ColorMode({ colorMode }) {
 export function Theme({ theme = {}, colorMode, children }) {
   const config = {
     ...theme?.config,
-    cssVarPrefix: ''
+    cssVarPrefix: '',
   };
 
   // force color mode
@@ -239,7 +239,7 @@ export function Theme({ theme = {}, colorMode, children }) {
       {typeof children === 'function' ? children() : children}
     </ChakraProvider>
   );
-};
+}
 
 /**
  * processCssMap - parses chakra theme values into a more digestable object
