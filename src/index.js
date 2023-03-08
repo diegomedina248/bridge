@@ -290,7 +290,7 @@ export const useTheme = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return {
-    values: processCssMap(theme?.__cssMap),
+    values: theme,
     colorMode,
     toggleColorMode,
   };
