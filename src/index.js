@@ -218,9 +218,16 @@ function ColorMode({ colorMode }) {
  */
 export function Theme({ theme = {}, colorMode, children }) {
   const config = {
-    initialColorMode: colorMode,
-    useSystemColorMode: false,
+    ...theme?.config,
+    cssVarPrefix: ''
   };
+
+  // force color mode
+  if (colorMode) {
+    config.initialColorMode = colorMode;
+    config.useSystemColorMode = false;
+  }
+
   const finalTheme = { ...theme, config };
 
   return (
@@ -228,11 +235,11 @@ export function Theme({ theme = {}, colorMode, children }) {
       <ColorModeScript
         initialColorMode={finalTheme?.config?.initialColorMode}
       />
-      <ColorMode colorMode={colorMode} />
+      {colorMode ? <ColorMode colorMode={colorMode} /> : null}
       {typeof children === 'function' ? children() : children}
     </ChakraProvider>
   );
-}
+};
 
 /**
  * processCssMap - parses chakra theme values into a more digestable object
