@@ -29,9 +29,9 @@
   "dependencies": {
     "@babel/runtime": "^7.6.3",
     "classnames": "^2.2.6",
-    "@chakra-ui/provider": "^2.1.2",
-    "@chakra-ui/color-mode": "2.1.11",
-    "@chakra-ui/system": "^2.5.1",
+    "@chakra-ui/provider": "2.1.2",
+    "@chakra-ui/color-mode": "2.1.12",
+    "@chakra-ui/system": "2.5.1",
     "@emotion/react": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@swc/helpers": "^0.4.14"

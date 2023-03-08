@@ -2,9 +2,9 @@ lockfileVersion: 5.4
 
 specifiers:
   '@babel/runtime': ^7.6.3
-  '@chakra-ui/color-mode': 2.1.11
-  '@chakra-ui/provider': ^2.1.2
-  '@chakra-ui/system': ^2.5.1
+  '@chakra-ui/color-mode': 2.1.12
+  '@chakra-ui/provider': 2.1.2
+  '@chakra-ui/system': 2.5.1
   '@emotion/react': ^11.0.0
   '@emotion/styled': ^11.0.0
   '@swc/cli': ^0.1.57
@@ -29,7 +29,7 @@ specifiers:
 
 dependencies:
   '@babel/runtime': 7.20.0
-  '@chakra-ui/color-mode': 2.1.11_react@18.2.0
+  '@chakra-ui/color-mode': 2.1.12_react@18.2.0
   '@chakra-ui/provider': 2.1.2_fbxtuirhogpez7m7qjkm3itwca
   '@chakra-ui/system': 2.5.1_xqp3pgpqjlfxxa3zxu4zoc4fba
   '@emotion/react': 11.10.6_react@18.2.0
@@ -118,15 +118,6 @@ packages:
     resolution: {integrity: sha512-pKfOS/mztc4sUXHNc8ypJ1gPWSolWT770jrgVRfolVbYlki8y5Y+As996zMF6k5lewTu6j9DQequ7Cc9a69IVQ==}
     dev: false
 
-  /@chakra-ui/color-mode/2.1.11_react@18.2.0:
-    resolution: {integrity: sha512-556wqI/MohJAqzP9AD+YsKGi982TzrsAaRGr7RCY5fChNe/wHraLPjMPNITPjjDQWiUmZYkaEos78/4u3qOdpA==}
-    peerDependencies:
-      react: '>=18'
-    dependencies:
-      '@chakra-ui/react-use-safe-layout-effect': 2.0.4_react@18.2.0
-      react: 18.2.0
-    dev: false
-
   /@chakra-ui/color-mode/2.1.12_react@18.2.0:
     resolution: {integrity: sha512-sYyfJGDoJSLYO+V2hxV9r033qhte5Nw/wAn5yRGGZnEEN1dKPEdWQ3XZvglWSDTNd0w9zkoH2w6vP4FBBYb/iw==}
     peerDependencies:
@@ -195,14 +186,6 @@ packages:
       react: '>=18'
     dependencies:
       '@chakra-ui/react-use-safe-layout-effect': 2.0.5_react@18.2.0
-      react: 18.2.0
-    dev: false
-
-  /@chakra-ui/react-use-safe-layout-effect/2.0.4_react@18.2.0:
-    resolution: {integrity: sha512-GbQIdhiesXZ8DV+JxiERz3/zki6PELhYPz/7JxyFUk8xInJnUcuEz2L4bV7rXIm9/bd2kjf4gfV+lHOGfpJdLw==}
-    peerDependencies:
-      react: '>=18'
-    dependencies:
       react: 18.2.0
     dev: false
 
