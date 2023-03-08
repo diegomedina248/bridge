@@ -247,37 +247,37 @@ export function Theme({ theme = {}, colorMode, children }) {
  * @param {Object} theme
  * @param {React.Node} children
  */
-const cachedProcess = {
-  map: undefined,
-  result: undefined,
-};
+// const cachedProcess = {
+//   map: undefined,
+//   result: undefined,
+// };
 
-function processCssMap(cssMap) {
-  if (cachedProcess.map === cssMap) {
-    return cachedProcess.result;
-  }
+// function processCssMap(cssMap) {
+//   if (cachedProcess.map === cssMap) {
+//     return cachedProcess.result;
+//   }
 
-  const result = {};
+//   const result = {};
 
-  Object.entries(cssMap || {}).forEach(([key, value]) => {
-    const split = key.split('.');
-    let curr = result;
+//   Object.entries(cssMap || {}).forEach(([key, value]) => {
+//     const split = key.split('.');
+//     let curr = result;
 
-    split.forEach((splitPath, index) => {
-      if (index !== split.length - 1) {
-        curr[splitPath] = curr[splitPath] || {};
-        curr = curr[splitPath];
-      } else {
-        curr[splitPath] = value?.varRef;
-      }
-    });
-  });
+//     split.forEach((splitPath, index) => {
+//       if (index !== split.length - 1) {
+//         curr[splitPath] = curr[splitPath] || {};
+//         curr = curr[splitPath];
+//       } else {
+//         curr[splitPath] = value?.varRef;
+//       }
+//     });
+//   });
 
-  cachedProcess.map = cssMap;
-  cachedProcess.result = result;
+//   cachedProcess.map = cssMap;
+//   cachedProcess.result = result;
 
-  return result;
-}
+//   return result;
+// }
 
 /**
  * useTheme - returns the theme and helper functions to handle theming
