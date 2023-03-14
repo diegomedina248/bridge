@@ -295,6 +295,7 @@ export const useTheme = () => {
   const { colorMode, toggleColorMode } = useColorMode();
 
   return {
+    configuration: theme,
     tokens: processCssMap(theme?.__cssMap),
     colorMode,
     toggleColorMode,
