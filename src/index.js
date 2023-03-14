@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import { ChakraProvider } from '@chakra-ui/provider';
 import { ColorModeScript, useColorMode } from '@chakra-ui/color-mode';
 import { useTheme as useChakraTheme } from '@chakra-ui/system';
+import { extendTheme } from '@chakra-ui/theme-utils';
 
 /**
  * Get the clutch inspector at the current version
@@ -228,7 +229,7 @@ export function Theme({ theme = {}, colorMode, children }) {
     config.useSystemColorMode = false;
   }
 
-  const finalTheme = { ...theme, config };
+  const finalTheme = extendTheme({ ...theme, config });
 
   return (
     <ChakraProvider theme={finalTheme}>

@@ -5,6 +5,7 @@ specifiers:
   '@chakra-ui/color-mode': 2.1.12
   '@chakra-ui/provider': 2.1.2
   '@chakra-ui/system': 2.5.1
+  '@chakra-ui/theme-utils': ^2.0.11
   '@emotion/react': ^11.0.0
   '@emotion/styled': ^11.0.0
   '@swc/cli': ^0.1.57
@@ -32,6 +33,7 @@ dependencies:
   '@chakra-ui/color-mode': 2.1.12_react@18.2.0
   '@chakra-ui/provider': 2.1.2_fbxtuirhogpez7m7qjkm3itwca
   '@chakra-ui/system': 2.5.1_xqp3pgpqjlfxxa3zxu4zoc4fba
+  '@chakra-ui/theme-utils': 2.0.11
   '@emotion/react': 11.10.6_react@18.2.0
   '@emotion/styled': 11.10.6_3og6jmu6wvzuytygvdoxepq3x4
   '@swc/helpers': 0.4.14
