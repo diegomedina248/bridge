@@ -8,11 +8,65 @@ import { ColorModeScript, useColorMode } from '@chakra-ui/color-mode';
 import { useTheme as useChakraTheme } from '@chakra-ui/system';
 import { extendTheme } from '@chakra-ui/theme-utils';
 
+let cachedReports = [];
+let interval;
+
 /**
  * Get the clutch inspector at the current version
  */
-const INSPECTOR =
-  typeof window !== 'undefined' && window.__CLUTCH_INSPECTOR__?.v1;
+const getInspector = () => window?.__CLUTCH_INSPECTOR__?.v1;
+
+/**
+ * Sends reports that were cached before the inspector was ready
+ */
+const sendCachedReports = () => {
+  if(!cachedReports.length === 0) {
+    return;
+  }
+
+  const inspector = getInspector();
+
+  if (inspector) {
+    cachedReports.forEach(({ computedKey, report, clutchInternalId }) => {
+      inspector.report?.(computedKey, report, clutchInternalId);
+    });
+
+    cachedReports = [];
+  }
+
+  if(interval) {
+    clearInterval(interval);
+  }
+}
+
+/**
+ * Sends a report to the inspector
+ */
+const sendReport = (computedKey, report, clutchInternalId) => {
+  const inspector = getInspector();
+
+  if (inspector) {
+    if(cachedReports.length) {
+      sendCachedReports();
+
+      if(interval) {
+        clearInterval(interval);
+      }
+    }
+
+    inspector.report?.(computedKey, report, clutchInternalId);
+  } else {
+    cachedReports.push({
+      computedKey,
+      report,
+      clutchInternalId,
+    });
+
+    if(!interval) {
+      interval = setInterval(sendCachedReports, 1000);
+    }
+  }
+};
 
 /**
  * mClassnames - Merges class names
@@ -117,22 +171,17 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
     variants,
   };
 
-  if (INSPECTOR?.report) {
-    INSPECTOR.report(
-      [ownerScopeIdRef.current, instanceId, ''].join('#'),
-      report,
-    );
-  }
+  sendReport([ownerScopeIdRef.current, instanceId, ''].join('#'), report);
 
   // drop reports logic
   useEffect(() => {
-    if (INSPECTOR?.cancelDropReports && ownerScopeIdRef.current) {
-      INSPECTOR.cancelDropReports(ownerScopeIdRef.current);
+    if (getInspector()?.cancelDropReports && ownerScopeIdRef.current) {
+      getInspector().cancelDropReports(ownerScopeIdRef.current);
     }
 
     return () => {
-      if (INSPECTOR?.dropReports && ownerScopeIdRef.current) {
-        INSPECTOR.dropReports(ownerScopeIdRef.current);
+      if (getInspector()?.dropReports && ownerScopeIdRef.current) {
+        getInspector().dropReports(ownerScopeIdRef.current);
       }
     };
   }, [dataD]);
@@ -142,8 +191,8 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
     (childReport, childId, customKey, clutchInternalId) => {
       const key = [ownerScopeIdRef.current, childId, customKey].join('#');
 
-      if (INSPECTOR?.report) {
-        INSPECTOR.report(key, childReport, clutchInternalId);
+      if (getInspector()?.report) {
+        sendReport(key, childReport, clutchInternalId);
       }
 
       return key;
