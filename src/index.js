@@ -20,7 +20,7 @@ const getInspector = () => window?.__CLUTCH_INSPECTOR__?.v1;
  * Sends reports that were cached before the inspector was ready
  */
 const sendCachedReports = () => {
-  if(!cachedReports.length === 0) {
+  if (!cachedReports.length === 0) {
     return;
   }
 
@@ -34,10 +34,10 @@ const sendCachedReports = () => {
     cachedReports = [];
   }
 
-  if(interval) {
+  if (interval) {
     clearInterval(interval);
   }
-}
+};
 
 /**
  * Sends a report to the inspector
@@ -46,10 +46,10 @@ const sendReport = (computedKey, report, clutchInternalId) => {
   const inspector = getInspector();
 
   if (inspector) {
-    if(cachedReports.length) {
+    if (cachedReports.length) {
       sendCachedReports();
 
-      if(interval) {
+      if (interval) {
         clearInterval(interval);
       }
     }
@@ -62,7 +62,7 @@ const sendReport = (computedKey, report, clutchInternalId) => {
       clutchInternalId,
     });
 
-    if(!interval) {
+    if (!interval) {
       interval = setInterval(sendCachedReports, 1000);
     }
   }
