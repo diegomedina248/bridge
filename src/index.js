@@ -14,7 +14,8 @@ let interval;
 /**
  * Get the clutch inspector at the current version
  */
-const getInspector = () => window?.__CLUTCH_INSPECTOR__?.v1;
+const getInspector = () =>
+  typeof window !== 'undefined' ? window?.__CLUTCH_INSPECTOR__?.v1 : undefined;
 
 /**
  * Sends reports that were cached before the inspector was ready
