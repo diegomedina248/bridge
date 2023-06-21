@@ -351,38 +351,3 @@ export const useTheme = () => {
     toggleColorMode,
   };
 };
-
-/**
- * useFont - injects a font stylesheet
- *
- * @param {String} url
- */
-const scheduledRemoves = {};
-
-export const useFont = (url) => {
-  useEffect(() => {
-    let element;
-
-    if (scheduledRemoves[url]) {
-      clearTimeout(scheduledRemoves[url].timeout);
-      element = scheduledRemoves[url].element;
-    } else {
-      element = document.createElement('link');
-
-      element.rel = 'stylesheet';
-      element.href = url;
-
-      document.head.appendChild(element);
-    }
-
-    return () => {
-      // timeout is required because of react refresh clearing
-      // hooks on updates
-      const timeout = setTimeout(() => {
-        document.head.removeChild(element);
-      }, 1000);
-
-      scheduledRemoves[url] = { timeout, element };
-    };
-  }, [url]);
-};
