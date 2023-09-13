@@ -189,11 +189,13 @@ export const useReport = (instanceId, propsArg, vars, variants, ref) => {
 
   // get key handler for children instances
   const getKey = useCallback(
-    (childReport, childId, customKey, clutchInternalId) => {
+    (childReport, childId, customKey, clutchInternalId, visible = true) => {
       const key = [ownerScopeIdRef.current, childId, customKey].join('#');
 
-      if (getInspector()?.report) {
+      if (visible && getInspector()?.report) {
         sendReport(key, childReport, clutchInternalId);
+      } else if (!visible && getInspector()?.dropReports) {
+        getInspector().dropReports(childId);
       }
 
       return key;
